@@ -1,0 +1,296 @@
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<style>
+	body, #app {text-align: center; width:95%; height:95%; background-color:black; color: white; text-shadow: 1px 2px 3px #000;background-size:contain;}
+	#content {font-size: 30px;}
+	#bg {background-color: rgba(0, 0, 0, 0.5);}
+	h1 {font-size: 60px}
+	li { list-style-type:none;}
+	ul {  position: absolute; bottom: 0; width:90%; margin-height: -100px}
+	#image {float:right; margin-right:100px}
+	#app {background-repeat: no-repeat; background-position:center}
+	#op {background-color: black; border-width: 0px; width:5px}
+	.flip-list-move {
+  transition: transform 1s;
+}
+div {
+ transition: all .5s ease;
+ -webkit-transition: all .5s ease 1s;
+ -moz-transition: all .5s ease 1s;
+ -ms-transition: all .5s ease 1s;
+ -o-transition: all .5s ease 1s;}
+</style>
+<title>山手線あたりで見れる鳥たち</title>
+</head>
+<body>
+	<div id="app" v-on:click.left="next"  v-on:click.middle="back" :style="{backgroundImage: 'url(' + bg.src + ')'}">
+		<div id="bg">
+			<div>
+			<h1 id="title">{{ title }}</h1>
+				<div style="float:right">
+				  <a href="index.html">_</a>
+			    </div>
+			</div>
+			<div v-if="image !== undefined" id="image">
+				<transition name="fade">
+					<img v-bind:src="image.src" v-bind:width="image.width" v-bind:height="image.height">
+				</transition>
+			</div>
+			<div id="content">
+				<transition-group name="flip-list" tag="ul">
+				<li v-for="item in messages" v-bind:key="item">
+					{{ item }}
+				</li>
+				</transition-group>
+				<div v-if="iframe !== undefined">
+					<iframe v-bind:src="iframe.src" v-bind:width="iframe.width" v-bind:height="iframe.height"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+	<script>
+	"use strict";
+    var pageData = [
+		{
+			title: '山手線あたりで見れるで(あろう)鳥たち',
+			messages: ['割と色々な種類の鳥がいますよ'],
+			bgs: ['img/main.jpg']
+		},
+		{
+			title: 'みんな知ってる鳥たち',
+			messages: ['スズメ(Tree Sparrow)', 'ハシブトガラス(Jungle Crow)', 'ハト(Pigeon)'],
+			bgs: [
+				'img/suzume.JPG',
+				'img/karasu.JPG',
+				'img/hato.JPG',
+
+			]
+		},
+		{
+			title: 'シジュウカラ(Great tit)',
+			messages: ['オフィスの近くでも見かけます。', '首からお腹にかけてネクタイのような黒い線があるのが特徴', '鳴き声に文法があるそうですよ'],
+			bgs: [
+				'img/greattit.JPG',
+				'img/greattit2.JPG',
+			]
+		},
+		{
+			title: 'ヒヨドリ(Brown-eared Bulbul)',
+			messages: ['そこら中にいます', 'ピーピーうるさいのはだいたいこれ。', '群れで渡ることもあります'],
+			bgs: [
+				'img/hiyo.JPG',
+				'img/hiyo2.JPG',
+				'img/hiyo3.JPG',
+			]
+		},
+		{
+			title: 'ハクセキレイ(White Wagtail)',
+			messages: ['オフィスの近くやガーデンプレイスでも見かけます。', '歩いている姿がかわいい'],
+			bgs: [
+				'img/sekirei.JPG',
+				'img/sekirei2.JPG',
+				'img/sekirei3.JPG',
+			]
+		},
+		{
+			title: 'ムクドリ(White-cheeked Starling)',
+			messages: ['キュルキュルうるさいのはだいたいこれ。',"騒音問題になってるらしい"],
+			bgs: [
+				'img/muku.JPG',
+				'img/muku2.JPG',
+			]
+		},
+		{
+			title: 'キジバト(Eastern turtle dove)',
+			messages: ['低い声で早朝にないてるやつ', '木の多い公園とかだと見かけます', '羽が鱗模様なのが普通の鳩との違い'],
+			bgs: [
+				'img/kijibato.JPG',
+				'img/kijibato.JPG',
+				'img/kijibato2.JPG',
+			]
+		},
+		{
+			title: 'ウグイス(Warbler)',
+			messages: ['梅にウグイスはいません', 'ヤブの中で「チャッ、チャッ」みたいに鳴いているのがウグイス。','「ホーホケキョ」は初夏のみ。'],
+			bgs: [
+				'img/uguisu.JPG',
+				'img/uguisu.JPG',
+				'img/uguisu2.JPG',
+			]
+		},		
+		{
+			title: 'メジロ(Japanese White-eye)',
+			messages: ['梅にいるのはメジロです', '目の周りが白いのでメジロ'],
+			bgs: [
+				'img/mejiro.JPG',
+				'img/mejiro2.JPG',
+			]
+		},
+		{
+			title: 'ヤマガラ(Varied tit)',
+			messages: ['ちょっとカラフルです', '木の多い公園とかにいます', '明治神宮では餌付けされているので、手から餌を食べます。'],
+			bgs: [
+				'img/yamagara.JPG',
+				'img/yamagara2.JPG',
+				'img/yamagara3.JPG',
+			]
+		},
+		{
+			title: 'エナガ(Long-tailed tit)',
+			messages: ['かわいい', 'かわいい', 'かわいい', '北海道のシマエナガが有名かもしれない'],
+			bgs: [
+				'img/enaga.JPG',
+				'img/enaga3.JPG',
+				'img/enaga2.JPG',
+				'img/enaga5.JPG',
+			]
+		},
+		{
+			title: 'オナガ(Azure-winged Magpie)',
+			messages: ['ギュイギュイみたいな声でなきます。', '早朝にうちの家の前の電線によく止まってます。'],
+			bgs: [
+				'img/onaga2.JPG',
+				'img/onaga.JPG',
+			]
+		},
+		{
+			title: 'ツグミ(Azure-winged Magpie)',
+			messages: ['冬鳥で広めの公園とかにいます', '冬に鳴いていたけど、夏になると鳴かなくなる(というか、いなくなる)ので噤みだとか'],
+			bgs: [
+				'img/tsugumi.JPG',
+				'img/tsugumi2.JPG',
+			]
+		},
+		{
+			title: 'ワカケホンセイインコ(Indian Rose-necked Parakeet)',
+			messages: ['ペットが野生化したものです', '23区内で普通に見られるようです'],
+			bgs: [
+				'img/inko.JPG',
+			]
+		},
+		{
+			title: 'コゲラ(Japanese Pygmy Woodpecker)',
+			messages: ['小さなキツツキです', '「ギー」という声で鳴きます。', 'ドラミングもします'],
+			bgs: [
+				'img/kogera.JPG',
+				'img/kogera2.JPG',
+				'img/kogera3.JPG',
+			]
+		},
+		{
+			title: 'カワセミ(Common King Fisher)',
+			messages: ['きれいな青い鳥です。', '水に飛び込んで小魚を食べます'],
+			bgs: [
+				'img/kawasemi.JPG',
+				'img/kawasemi2.JPG',
+			]
+		},
+		{
+			title: 'オオタカ(Northern Goshawk)',
+			messages: ['明治神宮でも営巣しています','成鳥は横縞', '幼鳥は縦縞'],
+			bgs: [
+				'img/ootaka.JPG',
+				'img/ootaka2.JPG',
+				'img/ootaka3.JPG',
+			]
+		},
+		{
+			title: 'その他...',
+			messages: ['キンクロハジロ、カワウ、ゴイサギ、ルリビタキ、ジョウビタキ、ハクチョウ、カワラヒワ、アトリ、ホオジロ、ツバメ、ガビチョウ、オオルリ、カモメ、アカハラ、シロハラ、オシドリ などなど...', '上野公園、谷中霊園、明治神宮・代々木公園、日比谷公園、皇居等々で見ることができるかも'],
+			bgs: [
+				'img/rest.jpg',
+			]
+		},
+	];
+    var page = 0;
+    var startPage = page;
+    var inMessageClick = 0
+
+	var m = location.hash.match(/#([0-9]+)-([0-9]+)$/);
+	if (m && m.length == 3) {
+		page = Number(m[1]) - 1;
+		startPage = page;
+	}
+
+	var app = new Vue({
+		el: '#app',
+		data: {
+			title   : pageData[startPage].title,
+			messages: [],
+			iframe  : pageData[startPage].iframe,
+			image   : pageData[startPage].image || pageData[page].bgs[0],
+			bgs     : pageData[startPage].bgs,
+			bg      : {},
+		},
+		mounted: function() {
+			let self = this;
+			window.addEventListener('keyup', function(ev) {
+				if (ev.key === "ArrowRight") {
+					self.next(ev);
+				} else if ( ev.key == "ArrowLeft") {
+					self.back(ev);
+				}
+			})
+		},
+		methods: {
+			next: function (event) {
+				if (page < pageData.length) {
+					var ret = showPage(this, page, inMessageClick, false);
+					page = ret[0];
+					inMessageClick = ret[1];
+				} else if (page == pageData.length) {
+					var ret = showPage(this, page, inMessageClick, false);
+					inMessageClick = ret[1];
+				}
+			},
+			back: function (event) {
+				if (page > 0) {
+					inMessageClick = 0;
+					page = page - 1;
+					var ret = showPage(this, page, inMessageClick, true);
+				}
+			}
+		}
+	})
+
+	// setInterval(f, 1000);
+
+	function showPage (t, page, inMessageClick,skipMessage) {
+		if (inMessageClick == 0) {
+				t.title    = pageData[page].title;
+				t.iframe   = pageData[page].iframe;
+				t.image    = pageData[page].image || pageData[page].bgs[0];
+				t.messages = [];
+				t.bgs      = pageData[page].bgs;
+				t.bg.src       = t.bgs[0];
+				page = page + 1;
+				location.hash = page + '-' + inMessageClick;
+		}
+
+		if (! skipMessage && pageData[page -1].messages && pageData[page -1].messages.length > 0) {
+			if (pageData[page -1].messages.length > inMessageClick) {
+				t.messages = [ pageData[page -1].messages[inMessageClick] ];
+				if (t.bgs && t.bgs.length > 0 && t.bgs[inMessageClick]) {
+					t.bg.src = t.bgs[inMessageClick];
+				}
+				inMessageClick = inMessageClick + 1;
+				location.hash = page + '-' + inMessageClick;
+				if (pageData[page -1].messages.length == inMessageClick) {
+					if ( pageData[page] ) {
+						inMessageClick = 0
+					}
+				}
+			} else {
+				if ( pageData[page] ) {
+					inMessageClick = 0;
+				}
+			}
+		} else {
+			t.messages = [];
+		}
+		return [page, inMessageClick];
+	}
+</script>
+</html>
